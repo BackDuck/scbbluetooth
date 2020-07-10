@@ -1,6 +1,5 @@
 package com.example.scbbluetooth.presentation.ui
 
-import android.os.Bundle
 import com.example.scbbluetooth.R
 import com.example.scbbluetooth.base.MoxyActivity
 import javax.inject.Inject
