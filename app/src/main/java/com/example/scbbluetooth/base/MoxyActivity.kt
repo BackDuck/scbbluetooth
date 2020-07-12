@@ -2,11 +2,11 @@ package com.example.scbbluetooth.base
 
 import android.os.Bundle
 import androidx.lifecycle.LifecycleObserver
-import com.arellomobile.mvp.MvpAppCompatActivity
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import moxy.MvpAppCompatActivity
 import javax.inject.Inject
 
 abstract class MoxyActivity : MvpAppCompatActivity(), ActivityMvpInterface, HasAndroidInjector {

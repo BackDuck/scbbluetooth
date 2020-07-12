@@ -1,40 +1,33 @@
 package com.example.scbbluetooth.presentation.ui.work
 
-import android.content.res.ColorStateList
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.core.content.ContextCompat
-import com.arellomobile.mvp.MvpAppCompatActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.example.scbbluetooth.R
 import com.example.scbbluetooth.base.MoxyActivity
 import kotlinx.android.synthetic.main.activity_work.*
+import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 import javax.inject.Provider
 
-class WorkActivity : MvpAppCompatActivity(), WorkView {
+class WorkActivity : MoxyActivity(),
+    WorkView {
 
-    @InjectPresenter
-    lateinit var workPresenter: WorkPresenter
+    @Inject
+    lateinit var presenterProvider: Provider<WorkPresenter>
+    private val presenter by moxyPresenter { presenterProvider.get() }
 
-    @ProvidePresenter
-    fun provideWorkPresenter() = WorkPresenter()
+    override val layout = R.layout.activity_work
 
-    private var root: View? = null
+    override fun onViewPrepare(savedInstanceState: Bundle?) {
+        super.onViewPrepare(savedInstanceState)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_work)
-
-        title = "Трекер времени";
-        tv_worktime.text = getString(R.string.tv_worktime);
+        title = "Трекер времени"
+        tv_worktime.text = getString(R.string.tv_worktime)
         btn_startwork.setOnClickListener {
-            workPresenter.onButtonClick()
+            presenter.onButtonClick()
         }
         tv_worktime.setOnChronometerTickListener {
-            workPresenter.onChronometerTick(tv_worktime.base)
+            presenter.onChronometerTick(tv_worktime.base)
         }
     }
 
@@ -48,10 +41,9 @@ class WorkActivity : MvpAppCompatActivity(), WorkView {
 
     override fun changeStatus(isWorking: Boolean) {
         if (isWorking) {
-            if(cb_home.isChecked){
+            if (cb_home.isChecked) {
                 tv_current.text = getString(R.string.cb_home)
-            }
-            else {
+            } else {
                 tv_current.text = getString(R.string.work)
             }
             cb_home.isClickable = false
@@ -60,8 +52,7 @@ class WorkActivity : MvpAppCompatActivity(), WorkView {
             tv_current.setBackgroundResource(R.drawable.status_working)
             btn_startwork.setBackgroundResource(R.drawable.pink_button)
             btn_startwork.text = "Закончить работу"
-        }
-        else {
+        } else {
             cb_home.isClickable = true
             cb_home.isChecked = false
             tv_current.text = getString(R.string.status_default)
@@ -81,4 +72,5 @@ class WorkActivity : MvpAppCompatActivity(), WorkView {
         tv_date.text = d
         tv_worktime.base = b
     }
+
 }

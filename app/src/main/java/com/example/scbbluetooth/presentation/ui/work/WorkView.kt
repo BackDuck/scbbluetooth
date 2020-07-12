@@ -1,10 +1,10 @@
 package com.example.scbbluetooth.presentation.ui.work
 
-import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
-import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import com.example.scbbluetooth.base.BaseView
+import moxy.MvpView
+import moxy.viewstate.strategy.AddToEndSingleStrategy
+import moxy.viewstate.strategy.StateStrategyType
 
-interface WorkView : BaseView {
+interface WorkView : MvpView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun startWatch()

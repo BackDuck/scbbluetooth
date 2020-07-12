@@ -1,8 +1,8 @@
 package com.example.scbbluetooth.presentation.ui.work
 
 import android.os.SystemClock
-import com.arellomobile.mvp.InjectViewState
 import com.example.scbbluetooth.base.MoxyPresenter
+import moxy.InjectViewState
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -13,7 +13,7 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
     private var isWorking = false
     private var fromHome = false
 
-    fun onButtonClick(){
+    fun onButtonClick() {
         if (!isWorking) {
             val calendar: Calendar = Calendar.getInstance()
             val sdf = SimpleDateFormat("dd.MM.yy")
@@ -22,8 +22,7 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
             viewState.startWatch()
             isWorking = true
             viewState.changeStatus(isWorking)
-        }
-        else {
+        } else {
             viewState.stopWatch()
             isWorking = false
             viewState.changeStatus(isWorking)
