@@ -16,14 +16,14 @@ abstract class MoxyActivity : MvpAppCompatActivity(), ActivityMvpInterface, HasA
     }
 
     @Inject
-    lateinit var androidInjector : DispatchingAndroidInjector<Any>
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
 
     override fun androidInjector(): AndroidInjector<Any> {
         return androidInjector
     }
+
     protected abstract val layout: Int
-    abstract val containerId: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -43,12 +43,7 @@ abstract class MoxyActivity : MvpAppCompatActivity(), ActivityMvpInterface, HasA
     protected open fun onViewDestroy() {
     }
 
-    fun addLifecycleObserver(observer: LifecycleObserver){
+    fun addLifecycleObserver(observer: LifecycleObserver) {
         lifecycle.addObserver(observer)
-    }
-
-    override fun showSnackBar(text: String, duration: Int) {
-
-
     }
 }

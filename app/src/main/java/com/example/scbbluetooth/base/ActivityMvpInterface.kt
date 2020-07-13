@@ -1,7 +1,3 @@
 package com.example.scbbluetooth.base
 
-
-interface ActivityMvpInterface: BaseView {
-
-
-}
+interface ActivityMvpInterface : BaseView

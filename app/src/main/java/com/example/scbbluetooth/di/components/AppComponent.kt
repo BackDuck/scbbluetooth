@@ -2,11 +2,11 @@ package com.example.scbbluetooth.di.components
 
 import android.app.Application
 import com.example.scbbluetooth.App
+import com.example.scbbluetooth.di.modules.builders.ActivityBuilder
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import com.example.scbbluetooth.di.modules.builder.ActivityBuilder
 import javax.inject.Singleton
 
 @Singleton

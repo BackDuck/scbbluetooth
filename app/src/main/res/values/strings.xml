@@ -1,3 +1,23 @@
 <resources>
-    <string name="app_name">SCBbluetooth</string>
+    <string name="app_name">SCBBluetooth</string>
+    <string name="tv_welcome">Добро пожаловать</string>
+    <string name="tv_descr">Чтобы узнать ... введите\nсвой логин и пароль</string>
+    <string name="tv_login">Логин</string>
+    <string name="tv_pass">Пароль</string>
+    <string name="tv_error">Неверно указан логин и/или пароль</string>
+    <string name="hint_pass">Введите пароль</string>
+    <string name="hint_login">Введите логин</string>
+    <string name="btn_login">Войти</string>
+    <string name="tv_forgot">Не помню пароль</string>
+    <string name="status_default">Не работаю</string>
+    <string name="current_status_title">Ваш текущий статус</string>
+    <string name="tv_date">08.07.20</string>
+    <string name="tv_worktime">00 : 00 : 00</string>
+    <string name="error">Error</string>
+    <string name="tv_bterror">Что-то пошло не так...</string>
+    <string name="tv_btdescr">Убедитесь, что в устройстве включена функция bluetooth и работает интернет-соединение</string>
+    <string name="btn_settings">Перейти в настройки</string>
+    <string name="btn_startwork">Начать работу</string>
+    <string name="cb_home">Работаю из дома</string>
+    <string name="work">Работаю</string>
 </resources>

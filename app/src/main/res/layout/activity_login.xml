@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".presentation.ui.login.LoginActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_welcome"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="30dp"
+        android:fontFamily="@font/sfprodisplaysemibold"
+        android:text="@string/tv_welcome"
+        android:textColor="@color/darkBlue"
+        app:autoSizeMaxTextSize="33sp"
+        app:autoSizeMinTextSize="25sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_descr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:fontFamily="@font/sfprotextlight"
+        android:lines="2"
+        android:text="@string/tv_descr"
+        android:textColor="@color/darkGray"
+        android:textSize="20sp"
+        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeMinTextSize="15sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_welcome" />
+
+    <LinearLayout
+        android:id="@+id/form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="30dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_descr">
+
+        <TextView
+            android:id="@+id/tv_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sfprodisplaysemibold"
+            android:text="@string/tv_login"
+            android:textSize="20sp"
+            android:textColor="@color/darkBlue"
+            app:autoSizeMaxTextSize="20sp"
+            app:autoSizeMinTextSize="17sp"
+            app:autoSizeTextType="uniform" />
+
+        <EditText
+            android:id="@+id/et_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autofillHints="login"
+            android:background="@drawable/edit_text"
+            android:digits="abcdefghijklmnopqrstuvwxyz"
+            android:fontFamily="@font/sfprotextlight"
+            android:hint="@string/hint_login"
+            android:inputType="text"
+            android:paddingStart="17dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="17dp"
+            android:paddingBottom="20dp"
+            app:autoSizeMaxTextSize="18sp"
+            app:autoSizeMinTextSize="14dp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_login" />
+
+        <TextView
+            android:id="@+id/tv_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/sfprodisplaysemibold"
+            android:text="@string/tv_pass"
+            android:textColor="@color/darkBlue"
+            app:autoSizeMaxTextSize="20sp"
+            app:autoSizeMinTextSize="17sp"
+            android:textSize="20sp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_login" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_pass"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/gray">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="password"
+                android:background="@drawable/edit_text"
+                android:fontFamily="@font/sfprotextlight"
+                android:hint="@string/hint_pass"
+                android:inputType="numberPassword"
+                android:paddingStart="17dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="17dp"
+                android:paddingBottom="20dp"
+                android:maxLength="4"
+                app:autoSizeMaxTextSize="10sp"
+                app:autoSizeTextType="none"
+                app:layout_constraintBottom_toTopOf="@id/tv_error"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_pass"
+                app:passwordToggleEnabled="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/sfprotextregular"
+            android:maxLines="1"
+            android:text="@string/tv_error"
+            android:textColor="@color/pink"
+            app:autoSizeMaxTextSize="18sp"
+            app:autoSizeMinTextSize="15sp"
+            app:autoSizeTextType="uniform"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_pass" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/form">
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_active"
+            android:fontFamily="@font/sfprotextmedium"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="@string/btn_login"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            app:autoSizeMaxTextSize="25sp"
+            app:autoSizeMinTextSize="20dp"
+            app:autoSizeTextType="uniform" />
+
+        <TextView
+            android:id="@+id/tv_forgot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/sfprotextmedium"
+            android:gravity="bottom|center"
+            android:text="@string/tv_forgot"
+            android:textColor="@color/darkBlue"
+            android:textSize="20sp"
+            app:autoSizeMaxTextSize="20sp"
+            app:autoSizeMinTextSize="17sp"
+            app:autoSizeTextType="uniform" />
+    </LinearLayout>
+
+</LinearLayout>
