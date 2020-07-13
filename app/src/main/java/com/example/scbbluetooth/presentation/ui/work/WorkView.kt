@@ -13,7 +13,10 @@ interface WorkView : MvpView {
     fun stopWatch()
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun changeStatus(isWorking: Boolean)
+    fun startWorking(fromHome: Boolean)
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun stopWorking()
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun changeTimer(s: String)

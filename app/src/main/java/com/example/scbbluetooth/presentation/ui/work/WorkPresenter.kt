@@ -10,27 +10,40 @@ import javax.inject.Inject
 @InjectViewState
 class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
 
-    private var isWorking = false
-    private var fromHome = false
+    private var status = 1
+    private var workTimeInSec: Long = 0
 
-    fun onButtonClick() {
-        if (!isWorking) {
-            val calendar: Calendar = Calendar.getInstance()
-            val sdf = SimpleDateFormat("dd.MM.yy")
-            val currentDate: String = sdf.format(calendar.time)
-            viewState.refreshChrono(SystemClock.elapsedRealtime(), currentDate)
-            viewState.startWatch()
-            isWorking = true
-            viewState.changeStatus(isWorking)
+    fun prepareChronometer() {
+        // TODO: Get status and time (if working) from db
+        val calendar: Calendar = Calendar.getInstance()
+        val sdf = SimpleDateFormat("dd.MM.yy")
+        val currentDate: String = sdf.format(calendar.time)
+        viewState.refreshChrono(SystemClock.elapsedRealtime(), currentDate)
+    }
+
+    fun onStartClick(fromHome: Boolean) {
+        prepareChronometer()
+        viewState.startWatch()
+        if (fromHome) {
+            status = 3
+            viewState.startWorking(true)
         } else {
-            viewState.stopWatch()
-            isWorking = false
-            viewState.changeStatus(isWorking)
+            status = 2
+            viewState.startWorking(false)
         }
+        // TODO: Save status to db
+    }
+
+    fun onStopClick() {
+        viewState.stopWatch()
+        status = 1
+        viewState.stopWorking()
+        // TODO: Save status to db
     }
 
     fun onChronometerTick(base: Long) {
         val time: Long = SystemClock.elapsedRealtime() - base
+        workTimeInSec = time / 1000
         val h = (time / 3600000).toInt()
         val m = (time - h * 3600000).toInt() / 60000
         val s = (time - h * 3600000 - m * 60000).toInt() / 1000
@@ -40,6 +53,7 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
                 ("0$s").takeLast(2)
 
         viewState.changeTimer(workTime)
+        // TODO: Save worktime to db
     }
 
 }
