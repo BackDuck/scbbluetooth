@@ -76,9 +76,9 @@ class WorkActivity : MoxyActivity(),
     }
 
     override fun refreshChrono(b: Long, d: String) {
-        tv_worktime.text = getString(R.string.tv_worktime)
         tv_date.text = d
         tv_worktime.base = b
+        tv_worktime.text = getString(R.string.tv_worktime)
     }
 
 }
