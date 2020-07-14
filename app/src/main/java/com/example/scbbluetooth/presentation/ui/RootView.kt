@@ -1,5 +1,6 @@
 package com.example.scbbluetooth.presentation.ui
 
-import com.arellomobile.mvp.MvpView
+import moxy.MvpView
+
 
 interface RootView : MvpView
