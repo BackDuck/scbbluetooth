@@ -3,7 +3,9 @@ package com.example.scbbluetooth.data.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.scbbluetooth.data.database.entity.WorktimeEntity
+
 
 @Dao
 interface WorktimeDao {
@@ -14,9 +16,12 @@ interface WorktimeDao {
     @Insert
     fun insertAll(vararg worktime: WorktimeEntity)
 
-    @Query("SELECT * FROM worktime")
-    fun getAll(): List<WorktimeEntity>
+    @Query("SELECT * FROM worktime LIMIT 1")
+    fun get(): WorktimeEntity?
 
     @Query("DELETE FROM worktime")
     fun removeAll()
+
+    @Update
+    fun update(worktime: WorktimeEntity)
 }

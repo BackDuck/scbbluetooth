@@ -25,6 +25,8 @@ class WorkActivity : MoxyActivity(),
         title = "Трекер времени"
         presenter.prepareChronometer()
 
+        presenter.onFirstLaunch()
+
         btn_startwork.setOnClickListener {
             presenter.onStartClick(cb_home.isChecked)
         }

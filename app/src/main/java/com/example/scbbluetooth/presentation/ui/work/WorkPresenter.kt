@@ -2,6 +2,10 @@ package com.example.scbbluetooth.presentation.ui.work
 
 import android.os.SystemClock
 import com.example.scbbluetooth.base.MoxyPresenter
+import com.example.scbbluetooth.data.database.AppDatabase
+import com.example.scbbluetooth.data.database.entity.WorktimeEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import moxy.InjectViewState
 import java.text.SimpleDateFormat
 import java.util.*
@@ -13,32 +17,58 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
     private var status = 1
     private var workTimeInSec: Long = 0
 
+    private lateinit var wtEntity: WorktimeEntity
+
+    @Inject
+    lateinit var database: AppDatabase
+
+    fun onFirstLaunch() {
+        runBlocking(Dispatchers.Default) { // coroutine on Main
+            database.worktimeDao().insert(WorktimeEntity(0, 1, 0))
+        }
+    }
+
     fun prepareChronometer() {
-        // TODO: Get status and time (if working) from db
+        runBlocking(Dispatchers.Default) {
+            wtEntity = database.worktimeDao().get() ?: WorktimeEntity(0, 1, 0)
+        }
+
+        runBlocking(Dispatchers.Default) {
+            wtEntity = database.worktimeDao().get() ?: WorktimeEntity(0, 1, 0)
+        }
         val calendar: Calendar = Calendar.getInstance()
         val sdf = SimpleDateFormat("dd.MM.yy")
         val currentDate: String = sdf.format(calendar.time)
-        viewState.refreshChrono(SystemClock.elapsedRealtime(), currentDate)
+        viewState.refreshChrono(
+            SystemClock.elapsedRealtime() - wtEntity.worktime * 1000,
+            currentDate
+        )
     }
 
     fun onStartClick(fromHome: Boolean) {
         prepareChronometer()
         viewState.startWatch()
         if (fromHome) {
+            wtEntity.state = 3
             status = 3
             viewState.startWorking(true)
         } else {
+            wtEntity.state = 2
             status = 2
             viewState.startWorking(false)
         }
-        // TODO: Save status to db
+        runBlocking(Dispatchers.Default) {
+            database.worktimeDao().update(wtEntity)
+        }
     }
 
     fun onStopClick() {
         viewState.stopWatch()
-        status = 1
+        wtEntity.state = 1
         viewState.stopWorking()
-        // TODO: Save status to db
+        runBlocking(Dispatchers.Default) {
+            database.worktimeDao().update(wtEntity)
+        }
     }
 
     fun onChronometerTick(base: Long) {
@@ -53,7 +83,10 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
                 ("0$s").takeLast(2)
 
         viewState.changeTimer(workTime)
-        // TODO: Save worktime to db
+        wtEntity.worktime = workTimeInSec
+        runBlocking(Dispatchers.Default) {
+            database.worktimeDao().update(wtEntity)
+        }
     }
 
 }

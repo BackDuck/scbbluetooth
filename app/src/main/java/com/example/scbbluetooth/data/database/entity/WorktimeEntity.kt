@@ -4,12 +4,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "worktime")
-data class WorktimeEntity (
+data class WorktimeEntity(
 
     @PrimaryKey(autoGenerate = true)
     var id: Int,
 
     var state: Int,
 
-    var worktime: String
+    var worktime: Long
 )
