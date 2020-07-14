@@ -60,7 +60,7 @@ class LoginActivity : MoxyActivity(),
 
     override fun login(type: String) {
         lateinit var intent: Intent
-        if (type == "emloyee") {
+        if (type == "employee") {
             intent = Intent(this@LoginActivity, WorkActivity::class.java)
             startActivity(intent)
         } else

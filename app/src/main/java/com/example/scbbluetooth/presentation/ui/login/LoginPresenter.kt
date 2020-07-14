@@ -3,7 +3,9 @@ package com.example.scbbluetooth.presentation.ui.login
 import com.example.scbbluetooth.api.SvmApiService
 import com.example.scbbluetooth.api.Worker
 import com.example.scbbluetooth.base.MoxyPresenter
+import com.example.scbbluetooth.di.modules.retrofit.RetrofitModule
 import com.example.scbbluetooth.models.User
+import com.example.scbbluetooth.presentation.ui.MockInterceptor
 import com.example.scbbluetooth.presentation.ui.login.LoginView
 import moxy.InjectViewState
 import javax.inject.Inject
@@ -19,6 +21,7 @@ class LoginPresenter @Inject constructor() : MoxyPresenter<LoginView>(){
     var params: Pair<String, String> = Pair("", "")
     var imeiP: String = ""
     var btAddress = ""
+    val baseUrl = "https://sovcombank.ru"
 
     fun onLoginClick() {
         viewState.getBtAddress()
@@ -28,7 +31,7 @@ class LoginPresenter @Inject constructor() : MoxyPresenter<LoginView>(){
 
         lateinit var user: User
 
-        if (params.first == "test" && params.second == "test") {
+        if (params.first == "test" && params.second == "1234") {
             user = User(
                 123456,
                 "ivan",
@@ -43,7 +46,7 @@ class LoginPresenter @Inject constructor() : MoxyPresenter<LoginView>(){
             addUser(user)
         } else {
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://sovcombank.ru")
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
@@ -68,7 +71,7 @@ class LoginPresenter @Inject constructor() : MoxyPresenter<LoginView>(){
                                 btAddress
                             )
 
-                            //addUser(user)
+                            addUser(user)
                         }
                         false -> viewState.sendErrorToast()
                     }
