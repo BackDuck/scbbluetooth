@@ -24,4 +24,13 @@ interface WorkView : MvpView {
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun refreshChrono(b: Long, d: String)
 
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun addBeacons()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setUpBeaconScanner()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setForeground()
+
 }

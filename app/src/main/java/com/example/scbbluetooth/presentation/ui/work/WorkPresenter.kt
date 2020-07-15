@@ -3,6 +3,7 @@ package com.example.scbbluetooth.presentation.ui.work
 import android.os.SystemClock
 import com.example.scbbluetooth.base.MoxyPresenter
 import com.example.scbbluetooth.data.database.AppDatabase
+import com.example.scbbluetooth.data.database.entity.BeaconEntity
 import com.example.scbbluetooth.data.database.entity.WorktimeEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -23,7 +24,7 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
     lateinit var database: AppDatabase
 
     fun onFirstLaunch() {
-        runBlocking(Dispatchers.Default) { // coroutine on Main
+        runBlocking(Dispatchers.Default) {
             database.worktimeDao().insert(WorktimeEntity(0, 1, 0))
         }
     }
@@ -86,6 +87,13 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
         wtEntity.worktime = workTimeInSec
         runBlocking(Dispatchers.Default) {
             database.worktimeDao().update(wtEntity)
+        }
+    }
+
+    fun addBeacon(uuid: String, rssi: Int, major: Int, minor: Int) {
+        val beaconEntity = BeaconEntity(0, uuid, rssi, major, minor)
+        runBlocking(Dispatchers.Default) {
+            database.beaconDao().insert(beaconEntity)
         }
     }
 
