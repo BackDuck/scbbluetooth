@@ -47,13 +47,13 @@
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/btn_serrings"
+        app:layout_constraintBottom_toTopOf="@id/btn_settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_error" />
 
     <Button
-        android:id="@+id/btn_serrings"
+        android:id="@+id/btn_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
