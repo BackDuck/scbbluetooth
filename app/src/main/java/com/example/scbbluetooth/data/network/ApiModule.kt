@@ -1,5 +1,6 @@
 package com.example.scbbluetooth.data.network
 
+import com.example.scbbluetooth.data.network.request.Request
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -12,7 +13,8 @@ class ApiModule {
     @Singleton
     fun provideRequest(
         retrofit: Retrofit
-    ): Request = retrofit.create(Request::class.java)
+    ): Request = retrofit.create(
+        Request::class.java)
 
     @Provides
     @Singleton
