@@ -30,6 +30,7 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
 
     override val layout = R.layout.activity_work
 
+
     override fun onViewPrepare(savedInstanceState: Bundle?) {
         super.onViewPrepare(savedInstanceState)
 
@@ -59,6 +60,7 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         beaconManager.beaconParsers.add(
             BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24")
         )
+
     }
 
     override fun setUpBeaconScanner() {
@@ -92,6 +94,7 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         beaconManager.setEnableScheduledScanJobs(false)
         beaconManager.backgroundBetweenScanPeriod = 5000
         beaconManager.foregroundBetweenScanPeriod = 5000
+        beaconManager.foregroundScanPeriod = 1000
     }
 
     override fun startWatch() {
@@ -149,11 +152,11 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
     override fun onBeaconServiceConnect() {
         beaconManager.addMonitorNotifier(object : MonitorNotifier {
             override fun didEnterRegion(region: Region) {
-                Toast.makeText(baseContext, "Вошел в регион", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(baseContext, "Вошел в регион", Toast.LENGTH_SHORT).show()
             }
 
             override fun didExitRegion(region: Region) {
-                Toast.makeText(baseContext, "Вышел из региона", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(baseContext, "Вышел из региона", Toast.LENGTH_SHORT).show()
             }
 
             override fun didDetermineStateForRegion(state: Int, region: Region) {
@@ -162,9 +165,10 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         })
         beaconManager.addRangeNotifier { beacons, _ ->
             if (beacons.isNotEmpty()) {
-                Toast.makeText(baseContext, "Обнаружены биконы", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(baseContext, "Обнаружены биконы", Toast.LENGTH_SHORT).show()
 
                 for (b in beacons) {
+                    // TODO: добавить константу uuid для проверки
                     val uuid = b.id1.toString()
                     val major = b.id2.toInt()
                     val minor = b.id3.toInt()
@@ -173,7 +177,7 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
                     presenter.addBeacon(uuid, rssi, major, minor)
                     Toast.makeText(
                         baseContext,
-                        uuid + major + minor + rssi + distance,
+                        "\nuuid: " + uuid + "\nmajor: " + major + "\nminor: " + minor + "\nrssi: " + rssi + "\ndistance: " + distance,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
