@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".presentation.ui.LoginActivity"
+    tools:context=".presentation.ui.login.LoginActivity"
     android:orientation="vertical">
 
     <TextView
@@ -108,7 +108,6 @@
             app:layout_constraintTop_toBottomOf="@id/et_login" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/et_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -120,6 +119,8 @@
             app:passwordToggleTint="@color/gray">
 
             <EditText
+                android:id="@+id/et_pass"
+                android:maxLength="4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autofillHints="password"
@@ -152,6 +153,7 @@
             app:autoSizeMaxTextSize="18sp"
             app:autoSizeMinTextSize="15sp"
             app:autoSizeTextType="uniform"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_pass" />
@@ -175,7 +177,7 @@
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/login_active"
+            android:background="@drawable/login_inactive"
             android:fontFamily="@font/sfprotextmedium"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
@@ -185,6 +187,7 @@
             android:textSize="25sp"
             app:autoSizeMaxTextSize="25sp"
             app:autoSizeMinTextSize="20dp"
+            android:enabled="false"
             app:autoSizeTextType="uniform" />
 
         <TextView

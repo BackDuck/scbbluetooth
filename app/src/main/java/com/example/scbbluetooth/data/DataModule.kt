@@ -10,7 +10,7 @@ import dagger.Provides
 class DataModule {
 
     @Provides
-    fun provideDatebase(context: Context): AppDatabase = Room.databaseBuilder(
+    fun provideDatabase(context: Context): AppDatabase = Room.databaseBuilder(
         context, AppDatabase::class.java, "scbBluetooth.db"
     ).build()
 

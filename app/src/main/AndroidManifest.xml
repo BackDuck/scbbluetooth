@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".App"
@@ -16,16 +17,19 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".presentation.ui.work.WorkActivity">
+        </activity>
+        <activity
+            android:name=".presentation.ui.login.LoginActivity"
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".presentation.ui.LoginActivity"
-            android:theme="@style/NoActionBar" />
-        <activity android:name=".presentation.ui.RootActivity"></activity>
+        <activity android:name=".presentation.ui.RootActivity">
+
+        </activity>
     </application>
 
 </manifest>

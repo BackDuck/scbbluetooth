@@ -3,6 +3,7 @@ package com.example.scbbluetooth.di.components
 import android.app.Application
 import com.example.scbbluetooth.App
 import com.example.scbbluetooth.data.DataModule
+import com.example.scbbluetooth.data.network.NetworkModule
 import com.example.scbbluetooth.di.modules.AppModule
 import com.example.scbbluetooth.di.modules.builders.ActivityBuilder
 import dagger.BindsInstance
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
+        NetworkModule::class,
         DataModule::class,
         ActivityBuilder::class,
         AndroidSupportInjectionModule::class,
