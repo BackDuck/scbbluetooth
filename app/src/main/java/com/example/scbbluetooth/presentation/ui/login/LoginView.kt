@@ -20,4 +20,8 @@ interface LoginView : MvpView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun changeActivity()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun addTextWatcher()
+
 }

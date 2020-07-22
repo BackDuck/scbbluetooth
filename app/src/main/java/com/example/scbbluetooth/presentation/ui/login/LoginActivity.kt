@@ -1,6 +1,5 @@
 package com.example.scbbluetooth.presentation.ui.login
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -11,7 +10,6 @@ import com.example.scbbluetooth.R
 import com.example.scbbluetooth.base.MoxyActivity
 import com.example.scbbluetooth.presentation.ui.work.WorkActivity
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_work.*
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 import javax.inject.Provider
@@ -23,50 +21,18 @@ class LoginActivity : MoxyActivity(),
     lateinit var presenterProvider: Provider<LoginPresenter>
     private val presenter by moxyPresenter { presenterProvider.get() }
 
+    private lateinit var textWatcher: TextWatcher
+
     override val layout = R.layout.activity_login
 
     override fun onViewPrepare(savedInstanceState: Bundle?) {
         super.onViewPrepare(savedInstanceState)
 
-        et_login.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
+        addTextWatcher()
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        et_login.addTextChangedListener(textWatcher)
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                tv_error.visibility = View.INVISIBLE
-                if (s.toString().isNotEmpty() && et_pass.text.length == 4) {
-                    btn_login.background = getDrawable(R.drawable.login_active)
-                    btn_login.isEnabled = true
-                }
-                else {
-                    btn_login.background = getDrawable(R.drawable.login_inactive)
-                    btn_login.isEnabled = false
-                }
-            }
-        })
-
-        et_pass.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                tv_error.visibility = View.INVISIBLE
-                if (s.toString().length == 4 && et_login.text.toString().isNotEmpty()) {
-                    btn_login.background = getDrawable(R.drawable.login_active)
-                    btn_login.isEnabled = true
-                }
-                else {
-                    btn_login.background = getDrawable(R.drawable.login_inactive)
-                    btn_login.isEnabled = false
-                }
-            }
-        })
+        et_pass.addTextChangedListener(textWatcher)
 
         btn_login.setOnClickListener {
             presenter.onLoginClick()
@@ -101,6 +67,27 @@ class LoginActivity : MoxyActivity(),
     override fun changeActivity() {
         val intent: Intent = Intent(this@LoginActivity, WorkActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun addTextWatcher() {
+        textWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                tv_error.visibility = View.INVISIBLE
+                if (s.toString().length == 4 && et_login.text.toString().isNotEmpty()) {
+                    btn_login.background = getDrawable(R.drawable.login_active)
+                    btn_login.isEnabled = true
+                } else {
+                    btn_login.background = getDrawable(R.drawable.login_inactive)
+                    btn_login.isEnabled = false
+                }
+            }
+        }
     }
 
 }

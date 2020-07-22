@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.scbbluetooth.R
 import com.example.scbbluetooth.base.MoxyActivity
-import com.example.scbbluetooth.presentation.ui.RootActivity
 import kotlinx.android.synthetic.main.activity_work.*
 import moxy.ktx.moxyPresenter
 import org.altbeacon.beacon.*
@@ -73,7 +72,7 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         val builder = Notification.Builder(this)
         // builder.setSmallIcon(R.drawable.ic_launcher)
         builder.setContentTitle("Scanning for Beacons")
-        val intent = Intent(this, RootActivity::class.java)
+        val intent = Intent(this, WorkActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
         )
