@@ -6,11 +6,13 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
+import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.scbbluetooth.R
 import com.example.scbbluetooth.base.MoxyActivity
+import com.example.scbbluetooth.presentation.ui.error.ErrorDialogFragment
 import kotlinx.android.synthetic.main.activity_work.*
 import moxy.ktx.moxyPresenter
 import org.altbeacon.beacon.*
@@ -76,12 +78,12 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
         )
-        builder.setContentIntent(pendingIntent);
+        builder.setContentIntent(pendingIntent)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "My Notification Channel ID",
                 "My Notification Name", NotificationManager.IMPORTANCE_DEFAULT
-            );
+            )
             channel.description = "My Notification Channel Description"
             val notificationManager = getSystemService(
                 Context.NOTIFICATION_SERVICE
@@ -93,7 +95,6 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         beaconManager.setEnableScheduledScanJobs(false)
         beaconManager.backgroundBetweenScanPeriod = 5000
         beaconManager.foregroundBetweenScanPeriod = 5000
-        beaconManager.foregroundScanPeriod = 1000
     }
 
     override fun startWatch() {
@@ -194,7 +195,8 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
     private fun verifyBluetooth() {
         try {
             if (!BeaconManager.getInstanceForApplication(this).checkAvailability()) {
-                // TODO: Go to error screen
+                val dialog = ErrorDialogFragment()
+                dialog.show(supportFragmentManager, "Error")
             }
         } catch (e: RuntimeException) {
             val builder = AlertDialog.Builder(this)
@@ -207,6 +209,10 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
             }
             builder.show()
         }
+    }
+
+    fun onSettingsClick(v: View) {
+        startActivity(Intent(Settings.ACTION_SETTINGS))
     }
 
 }

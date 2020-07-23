@@ -118,7 +118,7 @@
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/gray">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_pass"
                 android:maxLength="4"
                 android:layout_width="match_parent"
