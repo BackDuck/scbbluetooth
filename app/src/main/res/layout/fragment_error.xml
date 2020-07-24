@@ -28,7 +28,7 @@
         android:fontFamily="@font/sfprotextmedium"
         android:text="@string/tv_bterror"
         android:textColor="@color/darkBlue"
-        android:textSize="30sp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@id/tv_descr"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

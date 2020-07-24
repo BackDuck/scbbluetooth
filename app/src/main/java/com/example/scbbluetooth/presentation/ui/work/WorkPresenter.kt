@@ -8,6 +8,7 @@ import com.example.scbbluetooth.data.database.entity.WorktimeEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import moxy.InjectViewState
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -95,6 +96,20 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
         runBlocking(Dispatchers.Default) {
             database.beaconDao().insert(beaconEntity)
         }
+    }
+
+    fun isOnline(): Boolean {
+        val runtime = Runtime.getRuntime()
+        try {
+            val ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8")
+            val exitValue = ipProcess.waitFor()
+            return exitValue == 0
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+        return false
     }
 
 }

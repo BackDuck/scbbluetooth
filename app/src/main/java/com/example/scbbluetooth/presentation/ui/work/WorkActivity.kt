@@ -19,6 +19,7 @@ import org.altbeacon.beacon.*
 import javax.inject.Inject
 import javax.inject.Provider
 
+
 class WorkActivity : MoxyActivity(), BeaconConsumer,
     WorkView {
 
@@ -52,7 +53,7 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
             presenter.onChronometerTick(tv_worktime.base)
         }
 
-        verifyBluetooth()
+        verifyConnection()
         setUpBeaconScanner()
     }
 
@@ -177,7 +178,7 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
                     presenter.addBeacon(uuid, rssi, major, minor)
                     Toast.makeText(
                         baseContext,
-                        "\nuuid: " + uuid + "\nmajor: " + major + "\nminor: " + minor + "\nrssi: " + rssi + "\ndistance: " + distance,
+                        "\nuuid: $uuid\nmajor: $major\nminor: $minor\nrssi: $rssi\ndistance: $distance",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -192,10 +193,13 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         }
     }
 
-    private fun verifyBluetooth() {
+    private fun verifyConnection() {
         try {
-            if (!BeaconManager.getInstanceForApplication(this).checkAvailability()) {
+            if (!BeaconManager.getInstanceForApplication(this)
+                    .checkAvailability() || !presenter.isOnline()
+            ) {
                 val dialog = ErrorDialogFragment()
+                dialog.isCancelable = false
                 dialog.show(supportFragmentManager, "Error")
             }
         } catch (e: RuntimeException) {

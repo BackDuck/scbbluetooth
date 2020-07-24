@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.fragment.app.DialogFragment
 import com.example.scbbluetooth.R
+import org.altbeacon.beacon.BeaconManager
+import java.io.IOException
 
 
 class ErrorDialogFragment : DialogFragment() {
@@ -17,10 +19,6 @@ class ErrorDialogFragment : DialogFragment() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
         return builder
             .setView(R.layout.fragment_error)
-            .setOnKeyListener { _, keyCode, _ ->
-                keyCode == KeyEvent.KEYCODE_BACK
-            }
-            .setCancelable(false)
             .create()
     }
 
@@ -31,7 +29,31 @@ class ErrorDialogFragment : DialogFragment() {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
             dialog.window!!.setLayout(width, height)
+            dialog.setOnKeyListener { _, keyCode, _ ->
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (dialog.isShowing && (BeaconManager.getInstanceForApplication(activity?.applicationContext!!)
+                            .checkAvailability() && isOnline())
+                    ) {
+                        dialog.dismiss()
+                    }
+                }
+                true
+            }
         }
+    }
+
+    private fun isOnline(): Boolean {
+        val runtime = Runtime.getRuntime()
+        try {
+            val ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8")
+            val exitValue = ipProcess.waitFor()
+            return exitValue == 0
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+        return false
     }
 
 }
