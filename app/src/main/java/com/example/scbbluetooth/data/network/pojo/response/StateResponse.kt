@@ -2,9 +2,7 @@ package com.example.scbbluetooth.data.network.pojo.response
 
 import com.google.gson.annotations.SerializedName
 
-data class StateResponse (
-    @SerializedName("state")
-    var state: Int,
-    @SerializedName("worktime")
-    var worktime: Long
+data class StateResponse(
+    var state_id: Int,
+    var work_time: Int
 )

@@ -11,7 +11,5 @@ data class StateEntity(
 
     var state: Int,
 
-    var geo_lat: Double,
-
-    var geo_lng: Double
+    var worktime: Int
 )

@@ -1,81 +1,82 @@
 package com.example.scbbluetooth.presentation.ui.work
 
+import android.os.Handler
 import android.os.SystemClock
 import com.example.scbbluetooth.base.MoxyPresenter
 import com.example.scbbluetooth.data.database.AppDatabase
 import com.example.scbbluetooth.data.database.entity.BeaconEntity
-import com.example.scbbluetooth.data.database.entity.WorktimeEntity
+import com.example.scbbluetooth.data.database.entity.StateEntity
+import com.example.scbbluetooth.data.network.Api
+import com.example.scbbluetooth.data.network.pojo.body.TokenBody
+import com.example.scbbluetooth.data.network.pojo.response.StateResponse
+import io.reactivex.SingleObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import moxy.InjectViewState
+import retrofit2.Response
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 @InjectViewState
 class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
 
-    private var status = 1
-    private var workTimeInSec: Long = 0
+    private lateinit var token: String
 
-    private lateinit var wtEntity: WorktimeEntity
+    private lateinit var stateEntity: StateEntity
+
+    @Inject
+    lateinit var api: Api
 
     @Inject
     lateinit var database: AppDatabase
 
-    fun onFirstLaunch() {
-        runBlocking(Dispatchers.Default) {
-            database.worktimeDao().insert(WorktimeEntity(0, 1, 0))
-        }
+    fun onFirstLaunch(token: String) {
+        this.token = token
+        getState(token)
     }
 
     fun prepareChronometer() {
-        runBlocking(Dispatchers.Default) {
-            wtEntity = database.worktimeDao().get() ?: WorktimeEntity(0, 1, 0)
-        }
-
-        runBlocking(Dispatchers.Default) {
-            wtEntity = database.worktimeDao().get() ?: WorktimeEntity(0, 1, 0)
-        }
         val calendar: Calendar = Calendar.getInstance()
         val sdf = SimpleDateFormat("dd.MM.yy")
         val currentDate: String = sdf.format(calendar.time)
         viewState.refreshChrono(
-            SystemClock.elapsedRealtime() - wtEntity.worktime * 1000,
+            SystemClock.elapsedRealtime() - stateEntity.worktime * 1000,
             currentDate
         )
     }
 
     fun onStartClick(fromHome: Boolean) {
-        prepareChronometer()
         viewState.startWatch()
         if (fromHome) {
-            wtEntity.state = 3
-            status = 3
+            stateEntity.state = 3
             viewState.startWorking(true)
         } else {
-            wtEntity.state = 2
-            status = 2
+            stateEntity.state = 2
             viewState.startWorking(false)
         }
         runBlocking(Dispatchers.Default) {
-            database.worktimeDao().update(wtEntity)
+            database.stateDao().update(stateEntity)
         }
     }
 
     fun onStopClick() {
         viewState.stopWatch()
-        wtEntity.state = 1
+        stateEntity.state = 1
         viewState.stopWorking()
         runBlocking(Dispatchers.Default) {
-            database.worktimeDao().update(wtEntity)
+            database.stateDao().update(stateEntity)
         }
     }
 
     fun onChronometerTick(base: Long) {
         val time: Long = SystemClock.elapsedRealtime() - base
-        workTimeInSec = time / 1000
+        stateEntity.worktime = (time / 1000).toInt()
         val h = (time / 3600000).toInt()
         val m = (time - h * 3600000).toInt() / 60000
         val s = (time - h * 3600000 - m * 60000).toInt() / 1000
@@ -85,9 +86,8 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
                 ("0$s").takeLast(2)
 
         viewState.changeTimer(workTime)
-        wtEntity.worktime = workTimeInSec
         runBlocking(Dispatchers.Default) {
-            database.worktimeDao().update(wtEntity)
+            database.stateDao().update(stateEntity)
         }
     }
 
@@ -112,4 +112,60 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
         return false
     }
 
+    fun getState(token: String) {
+        api.getState(
+                TokenBody(token)
+                ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : SingleObserver<Response<StateResponse>> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onSuccess(response: Response<StateResponse>) {
+                    when (response.code()) {
+                        200 -> {
+                            stateEntity = StateEntity(
+                                0,
+                                response.body()!!.state_id,
+                                response.body()!!.work_time
+                            )
+                            runBlocking(Dispatchers.Default) {
+                                database.stateDao().removeAll()
+                                database.stateDao().insert(stateEntity)
+                            }
+                            prepareChronometer()
+                        }
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                }
+            })
+    }
+
+    private fun updateState(stEntity: StateEntity) {
+        api.getState(
+            TokenBody(token)
+        ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : SingleObserver<Response<StateResponse>> {
+                override fun onSubscribe(d: Disposable) {}
+                override fun onSuccess(response: Response<StateResponse>) {
+                    when (response.code()) {
+                        200 -> {
+                            stateEntity = StateEntity(
+                                0,
+                                response.body()!!.state_id,
+                                response.body()!!.work_time
+                            )
+                            runBlocking(Dispatchers.Default) {
+                                database.stateDao().update(stateEntity)
+                            }
+                            prepareChronometer()
+                        }
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                }
+            })
+    }
 }

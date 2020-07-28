@@ -1,8 +1,8 @@
-package com.example.scbbluetooth.data.network.pojo.response
+package com.example.scbbluetooth.data.network.pojo.body
 
 import com.google.gson.annotations.SerializedName
 
-data class TokenResponse (
+data class TokenBody (
     @SerializedName("token")
     var token: String
 )

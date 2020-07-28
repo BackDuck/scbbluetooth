@@ -3,16 +3,22 @@ package com.example.scbbluetooth.presentation.ui.work
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
+import android.preference.PreferenceManager
+import android.preference.PreferenceManager.getDefaultSharedPreferences
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.scbbluetooth.R
 import com.example.scbbluetooth.base.MoxyActivity
+import com.example.scbbluetooth.data.database.entity.StateEntity
 import com.example.scbbluetooth.presentation.ui.error.ErrorDialogFragment
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_work.*
 import moxy.ktx.moxyPresenter
 import org.altbeacon.beacon.*
@@ -37,9 +43,11 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         super.onViewPrepare(savedInstanceState)
 
         title = "Трекер времени"
-        presenter.prepareChronometer()
 
-        presenter.onFirstLaunch()
+        val mPrefs = getSharedPreferences("Account", MODE_PRIVATE)
+        val token = mPrefs.getString("TOKEN", "no value")
+
+        presenter.onFirstLaunch(token!!)
 
         btn_startwork.setOnClickListener {
             presenter.onStartClick(cb_home.isChecked)
@@ -55,6 +63,14 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
 
         verifyConnection()
         setUpBeaconScanner()
+    }
+
+    override fun showError(error: String) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showSuccess() {
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
     }
 
     override fun addBeacons() {
@@ -142,7 +158,7 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
     override fun refreshChrono(b: Long, d: String) {
         tv_date.text = d
         tv_worktime.base = b
-        tv_worktime.text = getString(R.string.tv_worktime)
+        presenter.onChronometerTick(b)
     }
 
     override fun onDestroy() {
@@ -161,7 +177,7 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
             }
 
             override fun didDetermineStateForRegion(state: Int, region: Region) {
-                println("I have just switched from seeing/not seeing beacons: " + state)
+                println("I have just switched from seeing/not seeing beacons: $state")
             }
         })
         beaconManager.addRangeNotifier { beacons, _ ->
