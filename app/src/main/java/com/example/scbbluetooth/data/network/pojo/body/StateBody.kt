@@ -2,7 +2,7 @@ package com.example.scbbluetooth.data.network.pojo.body
 
 import com.google.gson.annotations.SerializedName
 
-data class TokenBody (
-    @SerializedName("token")
-    var token: String
+data class StateBody(
+    @SerializedName("state_id")
+    var state_id: Int
 )

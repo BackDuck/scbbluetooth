@@ -8,7 +8,7 @@ import moxy.viewstate.strategy.StateStrategyType
 interface WorkView : MvpView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun startWatch()
+    fun startWatch(fromHome: Boolean)
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun stopWatch()

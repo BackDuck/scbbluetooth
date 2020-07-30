@@ -58,7 +58,7 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         }
 
         tv_worktime.setOnChronometerTickListener {
-            presenter.onChronometerTick(tv_worktime.base)
+            presenter.updateTime(tv_worktime.base)
         }
 
         verifyConnection()
@@ -114,12 +114,15 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         beaconManager.foregroundBetweenScanPeriod = 5000
     }
 
-    override fun startWatch() {
+    override fun startWatch(fromHome: Boolean) {
+        presenter.prepareChronometer()
         tv_worktime.start()
+        startWorking(fromHome)
     }
 
     override fun stopWatch() {
         tv_worktime.stop()
+        stopWorking()
     }
 
     override fun startWorking(fromHome: Boolean) {
@@ -158,7 +161,7 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
     override fun refreshChrono(b: Long, d: String) {
         tv_date.text = d
         tv_worktime.base = b
-        presenter.onChronometerTick(b)
+        presenter.updateTime(b)
     }
 
     override fun onDestroy() {
