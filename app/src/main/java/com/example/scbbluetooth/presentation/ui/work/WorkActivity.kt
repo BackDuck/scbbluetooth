@@ -3,22 +3,16 @@ package com.example.scbbluetooth.presentation.ui.work
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
-import android.preference.PreferenceManager
-import android.preference.PreferenceManager.getDefaultSharedPreferences
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.scbbluetooth.R
 import com.example.scbbluetooth.base.MoxyActivity
-import com.example.scbbluetooth.data.database.entity.StateEntity
 import com.example.scbbluetooth.presentation.ui.error.ErrorDialogFragment
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_work.*
 import moxy.ktx.moxyPresenter
 import org.altbeacon.beacon.*
@@ -118,18 +112,25 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         presenter.prepareChronometer()
         tv_worktime.start()
         startWorking(fromHome)
+        presenter.changeWorkStatus(true)
     }
 
     override fun stopWatch() {
         tv_worktime.stop()
         stopWorking()
+        presenter.changeWorkStatus(false)
     }
 
     override fun startWorking(fromHome: Boolean) {
-        if (!fromHome)
+        if (!fromHome) {
             tv_current.text = getString(R.string.work)
-        else
+            cb_home.isChecked = false
+            beaconManager.bind(this)
+        } else {
             tv_current.text = getString(R.string.cb_home)
+            cb_home.isChecked = true
+        }
+
 
         cb_home.isClickable = false
         cb_home.buttonTintList = ContextCompat.getColorStateList(this, R.color.darkGray)
@@ -137,7 +138,6 @@ class WorkActivity : MoxyActivity(), BeaconConsumer,
         tv_current.setBackgroundResource(R.drawable.status_working)
         btn_startwork.visibility = View.GONE
         btn_stoptwork.visibility = View.VISIBLE
-        beaconManager.bind(this)
     }
 
     override fun stopWorking() {

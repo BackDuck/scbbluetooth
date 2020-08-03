@@ -1,5 +1,6 @@
 package com.example.scbbluetooth.presentation.ui.login
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -14,6 +15,7 @@ import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 import javax.inject.Provider
 
+
 class LoginActivity : MoxyActivity(),
     LoginView {
 
@@ -22,11 +24,18 @@ class LoginActivity : MoxyActivity(),
     private val presenter by moxyPresenter { presenterProvider.get() }
 
     private lateinit var textWatcher: TextWatcher
+    private lateinit var dialog: AlertDialog
 
     override val layout = R.layout.activity_login
 
     override fun onViewPrepare(savedInstanceState: Bundle?) {
         super.onViewPrepare(savedInstanceState)
+
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setCancelable(false)
+
+        builder.setView(R.layout.progress)
+        dialog = builder.create()
 
         addTextWatcher()
 
@@ -35,6 +44,7 @@ class LoginActivity : MoxyActivity(),
         et_pass.addTextChangedListener(textWatcher)
 
         btn_login.setOnClickListener {
+            dialog.show()
             presenter.onLoginClick()
         }
         tv_forgot.setOnClickListener {
@@ -61,11 +71,11 @@ class LoginActivity : MoxyActivity(),
         val prefsEditor = mPrefs.edit()
         prefsEditor.putString("TOKEN", token)
         prefsEditor.apply()
-        Toast.makeText(this, mPrefs.getString("TOKEN", "no value"), Toast.LENGTH_SHORT).show()
+        dialog.hide()
     }
 
     override fun changeActivity() {
-        val intent: Intent = Intent(this@LoginActivity, WorkActivity::class.java)
+        val intent = Intent(this@LoginActivity, WorkActivity::class.java)
         startActivity(intent)
     }
 

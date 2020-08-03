@@ -32,6 +32,8 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
 
     private val mDisposable = CompositeDisposable()
 
+    private var isWorking = false
+
     @Inject
     lateinit var api: Api
 
@@ -51,15 +53,6 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
             SystemClock.elapsedRealtime() - stateEntity.worktime * 1000,
             currentDate
         )
-
-        /*
-        -- Блок для автоматического запуска/остановки таймера в зависимости от ответа с сервера --
-       ТОРМОЗИТ!
-        when (stateEntity.state) {
-            3 -> viewState.startWatch(true)
-            2 -> viewState.startWatch(false)
-            1 -> viewState.stopWatch()
-        }*/
     }
 
     fun onStartClick(fromHome: Boolean) {
@@ -69,13 +62,11 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
             stateEntity.state = 2
         }
         updateState()
-        viewState.startWatch(fromHome)
     }
 
     fun onStopClick() {
         stateEntity.state = 1
         updateState()
-        viewState.stopWatch()
     }
 
     fun updateTime(base: Long) {
@@ -92,6 +83,10 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
         runBlocking(Dispatchers.Default) {
             database.stateDao().update(stateEntity)
         }
+    }
+
+    fun changeWorkStatus(isWorking: Boolean) {
+        this.isWorking = isWorking
     }
 
     fun addBeacon(uuid: String, rssi: Int, major: Int, minor: Int) {
@@ -137,6 +132,14 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
                     }
                     runBlocking(Dispatchers.Main) {
                         prepareChronometer()
+                        when (stateEntity.state) {
+                            3 -> if (!isWorking)
+                                viewState.startWatch(true)
+                            2 -> if (!isWorking)
+                                viewState.startWatch(false)
+                            1 -> if (isWorking)
+                                viewState.stopWatch()
+                        }
                     }
                 }
             })
@@ -151,7 +154,6 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
             .subscribe(object : SingleObserver<StateResponse> {
                 override fun onSubscribe(d: Disposable) {}
                 override fun onSuccess(state: StateResponse) {
-
                     stateEntity = StateEntity(
                         0,
                         state.state_id,
@@ -164,8 +166,15 @@ class WorkPresenter @Inject constructor() : MoxyPresenter<WorkView>() {
                     }
 
                     runBlocking(Dispatchers.Main) {
-                        viewState.showError(state.state_id.toString())
                         prepareChronometer()
+                        when (stateEntity.state) {
+                            3 -> if (!isWorking)
+                                viewState.startWatch(true)
+                            2 -> if (!isWorking)
+                                viewState.startWatch(false)
+                            1 -> if (isWorking)
+                                viewState.stopWatch()
+                        }
                     }
                 }
 

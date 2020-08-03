@@ -41,7 +41,6 @@ class LoginPresenter @Inject constructor() : MoxyPresenter<LoginView>() {
                     when (response.code()) {
                         200 -> {
                             viewState.saveToken(response.headers()["Authorization"].toString())
-                            viewState.showSuccess()
                             viewState.changeActivity()
                         }
                         400 -> {

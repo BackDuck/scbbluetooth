@@ -1,6 +1,5 @@
 package com.example.scbbluetooth.presentation.ui.work
 
-import com.example.scbbluetooth.data.database.entity.StateEntity
 import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType

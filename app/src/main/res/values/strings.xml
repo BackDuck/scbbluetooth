@@ -21,4 +21,5 @@
     <string name="cb_home">Работаю из дома</string>
     <string name="work">Работаю</string>
     <string name="btn_stopwork">Закончить работу</string>
+    <string name="loading">Загрузка...</string>
 </resources>
